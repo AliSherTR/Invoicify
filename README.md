@@ -38,4 +38,3 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 =======
 # Invoicify
 A full stack app for creating and managing your invoices 
->>>>>>> 099163ae12bda2a63a472761d8236023d68308ec
