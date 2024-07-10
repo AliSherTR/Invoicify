@@ -1,9 +1,10 @@
 import React from "react";
 import { Button } from "./ui/button";
+import { createInvoice } from "@/app/actions";
 
 export default function AddInvoice() {
     return (
-        <form className=" ">
+        <form className="" action={createInvoice}>
             <p className=" text-[#7c5dfa] text-sm font-bold mb-3 mt-5">
                 Bill from
             </p>
@@ -18,7 +19,9 @@ export default function AddInvoice() {
                 <input
                     type="text"
                     id="street-address"
+                    name="streetAdress"
                     className=" w-full py-3 px-2 border border-gray-300 dark:bg-[#1e2139] dark:border-[#1e2139]"
+                    required
                 />
             </div>
 
@@ -33,7 +36,9 @@ export default function AddInvoice() {
                     <input
                         type="text"
                         id="city"
+                        name="city"
                         className=" w-full py-3 px-2 border border-gray-300 dark:bg-[#1e2139] dark:border-[#1e2139]"
+                        required
                     />
                 </div>
 
@@ -47,7 +52,9 @@ export default function AddInvoice() {
                     <input
                         type="text"
                         id="post-code"
+                        name="postCode"
                         className=" w-full py-3 px-2 border border-gray-300 dark:bg-[#1e2139] dark:border-[#1e2139]"
+                        required
                     />
                 </div>
 
@@ -61,7 +68,9 @@ export default function AddInvoice() {
                     <input
                         type="text"
                         id="country"
+                        name="country"
                         className=" w-full py-3 px-2 border border-gray-300 dark:bg-[#1e2139] dark:border-[#1e2139]"
+                        required
                     />
                 </div>
             </div>
@@ -80,7 +89,9 @@ export default function AddInvoice() {
                 <input
                     type="text"
                     id="street-address"
+                    name="clientName"
                     className=" w-full py-3 px-2 border border-gray-300 dark:bg-[#1e2139] dark:border-[#1e2139]"
+                    required
                 />
             </div>
             <div className=" mb-5">
@@ -91,9 +102,11 @@ export default function AddInvoice() {
                     {`Client's`} Email
                 </label>
                 <input
-                    type="text"
+                    type="email"
                     id="street-address"
+                    name="clientEmail"
                     className=" w-full py-3 px-2 border border-gray-300 dark:bg-[#1e2139] dark:border-[#1e2139]"
+                    required
                 />
             </div>
 
@@ -122,7 +135,9 @@ export default function AddInvoice() {
                     <input
                         type="text"
                         id="city"
+                        name="clientCity"
                         className=" w-full py-3 px-2 border border-gray-300 dark:bg-[#1e2139] dark:border-[#1e2139]"
+                        required
                     />
                 </div>
 
@@ -136,7 +151,9 @@ export default function AddInvoice() {
                     <input
                         type="text"
                         id="post-code"
+                        name="clientPostCode"
                         className=" w-full py-3 px-2 border border-gray-300 dark:bg-[#1e2139] dark:border-[#1e2139]"
+                        required
                     />
                 </div>
 
