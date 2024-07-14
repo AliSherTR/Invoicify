@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { Button } from "./ui/button";
 import { createInvoice, State } from "@/app/actions";
 import { useFieldArray, useForm } from "react-hook-form";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import AlertModal from "./AlertModal";
 import { SheetTrigger } from "./ui/sheet";
 
@@ -48,6 +48,7 @@ const defaultValues: formValues = {
 };
 
 export default function AddInvoice() {
+    const status = useFormStatus();
     const [state, formAction] = useFormState<State, FormData>(
         createInvoice,
         null
@@ -555,6 +556,7 @@ export default function AddInvoice() {
                     <Button
                         type="submit"
                         className="text-center rounded-[20px] py-4 text-sm"
+                        disabled={status.pending}
                     >
                         Save & Send
                     </Button>
