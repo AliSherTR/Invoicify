@@ -5,6 +5,7 @@ import { createInvoice, State } from "@/app/actions";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useFormState } from "react-dom";
 import AlertModal from "./AlertModal";
+import { SheetTrigger } from "./ui/sheet";
 
 interface Item {
     itemName: string;
@@ -19,7 +20,7 @@ interface formValues {
     ownerCountry: string;
     clientName: string;
     clientEmail: string;
-    clientStreeAddress: string;
+    clientStreetAddress: string;
     clientCity: string;
     clientPostCode: number;
     clientCountry: string;
@@ -28,6 +29,23 @@ interface formValues {
     projectDescription: string;
     itemList: Item[];
 }
+
+const defaultValues: formValues = {
+    ownerStreetAddress: "",
+    ownerCity: "",
+    ownerPostCode: 0,
+    ownerCountry: "",
+    clientName: "",
+    clientEmail: "",
+    clientStreetAddress: "",
+    clientCity: "",
+    clientPostCode: 0,
+    clientCountry: "",
+    invoiceDate: "",
+    paymentTerms: "",
+    projectDescription: "",
+    itemList: [{ itemName: "", quantity: 0, price: 0 }],
+};
 
 export default function AddInvoice() {
     const [state, formAction] = useFormState<State, FormData>(
@@ -61,7 +79,7 @@ export default function AddInvoice() {
         formData.append("ownerCountry", data.ownerCountry);
         formData.append("clientName", data.clientName);
         formData.append("clientEmail", data.clientEmail);
-        formData.append("clientStreeAddress", data.clientStreeAddress);
+        formData.append("clientStreeAddress", data.clientStreetAddress);
         formData.append("clientCity", data.clientCity);
         formData.append("clientPostCode", data.clientPostCode.toString());
         formData.append("clientCountry", data.clientCountry);
@@ -82,7 +100,7 @@ export default function AddInvoice() {
 
         formAction(formData);
 
-        reset();
+        reset(defaultValues);
     };
 
     const calculateTotal = (index: number) => {
@@ -245,14 +263,14 @@ export default function AddInvoice() {
                 <input
                     type="text"
                     id="clientStreetAddress"
-                    {...register("clientStreeAddress", {
+                    {...register("clientStreetAddress", {
                         required: "Street Address is required",
                     })}
                     className=" w-full py-3 px-2 border border-gray-300 dark:bg-[#1e2139] dark:border-[#1e2139]"
                 />
-                {errors.clientStreeAddress && (
+                {errors.clientStreetAddress && (
                     <span className="text-red-600 text-sm">
-                        {errors.clientStreeAddress.message}
+                        {errors.clientStreetAddress.message}
                     </span>
                 )}
             </div>
@@ -435,6 +453,8 @@ export default function AddInvoice() {
                             {...register(`itemList.${index}.quantity`, {
                                 required: "Quantity is required",
                             })}
+                            defaultValue={0}
+                            onChange={() => calculateTotal(index)}
                             className="w-full py-3 px-2 border border-gray-300 dark:bg-[#1e2139] dark:border-[#1e2139]"
                         />
                         {errors.itemList?.[index]?.quantity && (
@@ -516,12 +536,15 @@ export default function AddInvoice() {
 
             {/* Submit button */}
             <div className="flex justify-between items-center w-full mt-5 mb-5">
-                <Button
-                    variant="outline"
-                    className="text-center text-[#7e88c3] text-sm"
-                >
-                    Discard
-                </Button>
+                <SheetTrigger>
+                    <Button
+                        onClick={() => reset(defaultValues)}
+                        variant="outline"
+                        className="text-center text-[#7e88c3] text-sm"
+                    >
+                        Discard
+                    </Button>
+                </SheetTrigger>
                 <div>
                     <Button
                         variant="outline"
