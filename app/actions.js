@@ -2,20 +2,19 @@
 
 import { connectDB } from "@/lib/db/connectDb";
 import Invoice from "@/lib/models/invoice"; // Adjust the path as needed
+import { revalidatePath } from "next/cache";
 
-export type State = {
-    status: "success" | "error";
-    message: string;
-} | null;
+function generateUniqueId() {
+    const prefix = "RT";
+    const randomNumber = Math.floor(1000 + Math.random() * 9000);
+    return `#${prefix}${randomNumber}`;
+}
 
-export async function createInvoice(
-    prevState: State | null,
-    data: FormData
-): Promise<State> {
+export async function createInvoice(prevState, data) {
     await connectDB();
 
     try {
-        const formDataObject: { [key: string]: any } = {};
+        const formDataObject = {};
         Array.from(data.entries()).forEach(([key, value]) => {
             formDataObject[key] = value;
         });
@@ -42,20 +41,22 @@ export async function createInvoice(
                 country: formDataObject.clientCountry,
             },
             paymentTerms: formDataObject.paymentTerms,
-            items: formDataObject.itemsList.map((item: any) => ({
+            items: formDataObject.itemsList.map((item) => ({
                 name: item.name,
                 quantity: item.quantity,
                 price: item.price,
                 total: item.totalPrice,
             })),
             total: formDataObject.itemsList.reduce(
-                (acc: number, item: any) => acc + item.totalPrice,
+                (acc, item) => acc + item.totalPrice,
                 0
             ),
+            invoiceId: generateUniqueId(),
         });
 
         // Save the invoice to the database
         await newInvoice.save();
+        revalidatePath("/invoices");
 
         return { status: "success", message: "Invoice created successfully" };
     } catch (error) {

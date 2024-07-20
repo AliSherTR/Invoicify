@@ -7,59 +7,16 @@ import { useFormState, useFormStatus } from "react-dom";
 import AlertModal from "./AlertModal";
 import { SheetTrigger } from "./ui/sheet";
 
-interface Item {
-    itemName: string;
-    quantity: number;
-    price: number;
-}
-
-interface formValues {
-    ownerStreetAddress: string;
-    ownerCity: string;
-    ownerPostCode: number;
-    ownerCountry: string;
-    clientName: string;
-    clientEmail: string;
-    clientStreetAddress: string;
-    clientCity: string;
-    clientPostCode: number;
-    clientCountry: string;
-    invoiceDate: string;
-    paymentTerms: string;
-    projectDescription: string;
-    itemList: Item[];
-}
-
-const defaultValues: formValues = {
-    ownerStreetAddress: "",
-    ownerCity: "",
-    ownerPostCode: 0,
-    ownerCountry: "",
-    clientName: "",
-    clientEmail: "",
-    clientStreetAddress: "",
-    clientCity: "",
-    clientPostCode: 0,
-    clientCountry: "",
-    invoiceDate: "",
-    paymentTerms: "",
-    projectDescription: "",
-    itemList: [{ itemName: "", quantity: 0, price: 0 }],
-};
-
 export default function AddInvoice() {
     const status = useFormStatus();
-    const [state, formAction] = useFormState<State, FormData>(
-        createInvoice,
-        null
-    );
+    const [state, formAction] = useFormState(createInvoice, null);
     const {
         register,
         handleSubmit,
         reset,
         control,
         formState: { errors },
-    } = useForm<formValues>();
+    } = useForm();
 
     useEffect(() => {
         if (!state) {
@@ -72,7 +29,7 @@ export default function AddInvoice() {
         name: "itemList",
     });
 
-    const onSubmit = (data: formValues) => {
+    const onSubmit = (data) => {
         const formData = new FormData();
         formData.append("ownerStreetAddress", data.ownerStreetAddress);
         formData.append("ownerCity", data.ownerCity);
@@ -88,7 +45,7 @@ export default function AddInvoice() {
         formData.append("invoiceDate", invoiceDate.toISOString());
         formData.append("paymentTerms", data.paymentTerms);
         formData.append("projectDescription", data.projectDescription);
-        const itemListObjects = data.itemList.map((item: Item) => {
+        const itemListObjects = data.itemList.map((item) => {
             const totalPrice = item.quantity * item.price;
             return {
                 name: item.itemName,
@@ -104,7 +61,7 @@ export default function AddInvoice() {
         reset(defaultValues);
     };
 
-    const calculateTotal = (index: number) => {
+    const calculateTotal = (index) => {
         const item = fields[index];
         return item.quantity * item.price;
     };

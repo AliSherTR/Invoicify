@@ -23,6 +23,7 @@ const InvoiceSchema = new mongoose.Schema({
     },
     items: [{ name: String, quantity: Number, price: Number, total: Number }],
     total: Number,
+    invoiceId: String,
 });
 
 export default mongoose.models.Invoice ||
